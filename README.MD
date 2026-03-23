@@ -59,7 +59,3 @@ Random Forest and Support Vector Machine had the best performance
 However, while these two models have very similar performance, a major difference between both is that SVC performs significantly better in predicting Class 1 (Sleep Apnea) with a precision and recall score of 0.81. Random Forest on the other hand performas poorly in predicting Class 1 (Sleep Apnea) with a precision and recall scores of 0.90 and 0.56 respectively.
 </br>SVC's cross validation mean is also closer to it's accuracy score than RF's own.
 </br>As a result of all these, Support Vector Classifier is the best model of choice!
-
-## Project Impact
-This project will provide insight into the factors influencing sleep disorders, and it will develop a model to predict and identify individuals who are at risk for sleep disorder.
-This will improve overall health among all populations
