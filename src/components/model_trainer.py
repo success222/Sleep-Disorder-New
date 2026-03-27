@@ -32,43 +32,81 @@ class ModelTrainer:
             )
            
             models = {
-                "Random Forest": RandomForestClassifier(class_weight='balanced', random_state=42),
-                "SVC": SVC(class_weight='balanced', kernel='rbf', random_state=42),
-                "Decision Tree": DecisionTreeClassifier(class_weight='balanced', random_state=42),
-                "Extra Tree": ExtraTreeClassifier(class_weight='balanced', random_state=42)
+                "Random Forest": RandomForestClassifier(random_state=42),
+                "SVC": SVC(random_state=42),
+                "Decision Tree": DecisionTreeClassifier(random_state=42),
+                "Extra Tree": ExtraTreeClassifier(random_state=42)
             }
-            
-            
-            
-            model_report: dict = evaluate_models(X_train=X_train, y_train=y_train, 
-                                                 X_test=X_test, y_test=y_test, 
-                                                 models=models)
-            
+        
+            params = {
+                "Random Forest": {
+                    'n_estimators': [100, 200, 300],
+                    'max_depth': [None, 10, 20, 30],
+                    'min_samples_split': [2, 5, 10],
+                    'min_samples_leaf': [1, 2, 4],
+                    'bootstrap': [True, False],
+                    'class_weight': ['balanced', 'balanced_subsample']
+                },
+                "SVC": {
+                    'C': [0.1, 1, 10, 100],
+                    'kernel': ['linear', 'rbf'],
+                    'gamma': ['scale', 'auto'],
+                    'class_weight': ['balanced']
+                },
+                "Decision Tree": {
+                    'criterion': ['gini', 'entropy', 'log_loss'],
+                    'max_depth': [None, 10, 20, 30],
+                    'min_samples_split': [2, 5, 10],
+                    'min_samples_leaf': [1, 2, 4],
+                    'class_weight': ['balanced']
+                },
+                "Extra Tree": {
+                    'criterion': ['gini', 'entropy', 'log_loss'],
+                    'max_depth': [None, 10, 20, 30],
+                    'min_samples_split': [2, 5, 10],
+                    'min_samples_leaf': [1, 2, 4],
+                    'class_weight': ['balanced']
+                }
+            }
+                
+            model_report, best_models = evaluate_models(X_train=X_train, y_train=y_train, 
+                                                        X_test=X_test, y_test=y_test, 
+                                                        models=models, params=params)
+                
             ## Get the best model from the dict
-            best_model_score = max(sorted(model_report.values()))
-            
-            ## Get the name of best model
-            best_model_name = list(model_report.keys())[
-                list(model_report.values()).index(best_model_score)]
-            best_model = models[best_model_name]
-            
+            best_model_score = max(model_report.values())
+            best_model_name = max(model_report, key=model_report.get)
+            best_model = best_models[best_model_name]
+
             if best_model_score < 0.6:
-                raise CustomException("No best model found")
-            logging.info(f"Best found model on both training and testing dataset is {best_model_name} with accuracy score: {best_model_score}")
+                raise CustomException("No best model found", sys)
+
+            logging.info(
+                f"Best model found: {best_model_name} with score: {best_model_score}"
+            )
             
             
             save_object(
-                file_path=self.model_trainer_config.trained_model_file_path,
-                obj=best_model
-            )
+                    file_path=self.model_trainer_config.trained_model_file_path,
+                    obj=best_model
+                )
             
             predicted = best_model.predict(X_test)
             precision = precision_score(y_test, predicted, average='weighted')
             recall = recall_score(y_test, predicted, average='weighted')
             f1 = f1_score(y_test, predicted, average='weighted')
+        
             logging.info(f"Precision Score: {precision}")
             logging.info(f"Recall Score: {recall}")
             logging.info(f"F1 Score: {f1}")
+                
+            return {
+                "best_model_name": best_model_name,
+                "best_model_score": best_model_score,
+                "precision": precision,
+                "recall": recall,
+                "f1_score": f1
+            }
             
         except Exception as e:
             raise CustomException(e, sys)
