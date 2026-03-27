@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Health Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: #007bff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eaf4ea;
+            border-left: 5px solid #28a745;
+            border-radius: 8px;
+            color: #155724;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sleep Health Disorder Prediction</h1>
+
+        <form action="{{ url_for('predict_datapoint') }}" method="post">
+
+        <label>Age</label>
+        <input type="number" name="age" required>
+
+        <label>Gender</label>
+        <select name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label>Occupation</label>
+        <input type="text" name="occupation" required>
+
+        <label>Sleep Duration</label>
+        <input type="number" step="0.1" name="sleep_duration" required>
+
+        <label>Quality of Sleep</label>
+        <input type="number" step="0.1" name="quality_of_sleep" required>
+
+        <label>Physical Activity Level</label>
+        <input type="number" step="0.1" name="physical_activity_level" required>
+
+        <label>Stress Level</label>
+        <input type="number" step="0.1" name="stress_level" required>
+
+        <label>BMI Category</label>
+        <select name="bmi_category" required>
+            <option value="">Select BMI Category</option>
+            <option value="Normal">Normal</option>
+            <option value="Overweight">Overweight</option>
+            <option value="Obese">Obese</option>
+        </select>
+
+        <label>Systolic BP</label>
+        <input type="number" name="systolic_bp" required>
+
+        <label>Diastolic BP</label>
+        <input type="number" name="diastolic_bp" required>
+
+        <label>Heart Rate</label>
+        <input type="number" name="heart_rate" required>
+
+        <label>Daily Steps</label>
+        <input type="number" name="daily_steps" required>
+
+        <button type="submit">Predict</button>
+    </form>
+        
+        {% if results %}
+        <div class="result">
+            Your Sleep Health Prediction: {{ results }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
