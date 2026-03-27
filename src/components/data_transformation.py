@@ -13,7 +13,6 @@ from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
 
-
 @dataclass
 class DataTransformationConfig:
     preprocessor_obj_file_path: str = os.path.join('artifacts', 'preprocessor.pkl')
@@ -64,12 +63,27 @@ class DataTransformation:
         
     def initiate_data_transformation(self, train_path, test_path):
         try:
+            # Reading train and test data
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
             
+            # Clean column names
             train_df.columns = train_df.columns.str.strip().str.replace(' ', '_')
             test_df.columns = test_df.columns.str.strip().str.replace(' ', '_')
+
+            # fill target NaN
+            target_column_name = 'Sleep_Disorder'
             
+            train_df[target_column_name] = train_df[target_column_name].replace('None', np.nan)
+            test_df[target_column_name] = test_df[target_column_name].replace('None', np.nan)
+
+
+            train_df[target_column_name] = train_df[target_column_name].fillna('No Disorder')
+            test_df[target_column_name] = test_df[target_column_name].fillna('No Disorder')
+           
+            logging.info("Filling missing target values with 'No Disorder'")
+            
+            # Split 'Blood_Pressure' into 'Systolic_BP' and 'Diastolic_BP'
             train_df[['Systolic_BP', 'Diastolic_BP']] = train_df['Blood_Pressure'].str.split('/', expand=True)
             test_df[['Systolic_BP', 'Diastolic_BP']] = test_df['Blood_Pressure'].str.split('/', expand=True)
 
