@@ -1,0 +1,15 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.ipynb
+data/
+dataset/
+datasets/
+logs/
+artifacts/
+notebooks/
+*.csv
+*.xlsx
+*.parquet
