@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, render_template
 
 # from sklearn.preprocessing import StandardScaler
@@ -41,4 +43,4 @@ def predict_datapoint():
         return render_template('home.html', results=results[0])
         
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
