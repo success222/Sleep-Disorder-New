@@ -1,1 +1,110 @@
-<h1>Sleep Disorder Prediction</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Disorder Prediction App</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f8fbff);
+            color: #1f2937;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .card {
+            max-width: 800px;
+            background: #ffffff;
+            padding: 50px 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.4rem;
+            color: #0f172a;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #475569;
+            margin-bottom: 18px;
+        }
+
+        .note {
+            background: #f8fafc;
+            border-left: 5px solid #2563eb;
+            padding: 14px 16px;
+            border-radius: 10px;
+            text-align: left;
+            margin: 25px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 14px 24px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 35px 22px;
+            }
+
+            h1 {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="card">
+            <h1>Sleep Disorder Prediction App</h1>
+            <p>
+                This web app predicts the likelihood of <strong>Insomnia</strong>,
+                <strong>Sleep Apnea</strong>, or <strong>no apparent sleep disorder</strong>
+                based on lifestyle, sleep, and health-related information.
+            </p>
+            <p>
+                Enter your average daily values on the next page to receive a prediction
+                and simple health guidance.
+            </p>
+
+            <div class="note">
+                <strong>Disclaimer:</strong> This tool is for educational purposes only and does
+                not replace professional medical advice, diagnosis, or treatment.
+            </div>
+
+            <a href="{{ url_for('predict_datapoint') }}" class="btn">Go to Prediction Page</a>
+        </div>
+    </section>
+</body>
+</html>

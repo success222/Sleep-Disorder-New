@@ -61,4 +61,42 @@ def load_object(file_path):
             return dill.load(file_obj)
     except Exception as e:
         raise CustomException(e, sys)
-    
+
+def generate_prediction_text(result):
+    if result == "Sleep Apnea":
+        heading = "You are likely to experience SLEEP APNEA."
+        explanation = (
+            "Sleep apnea is a sleep disorder in which breathing repeatedly stops "
+            "and starts during sleep. It can reduce sleep quality and lead to "
+            "daytime tiredness and other health complications."
+        )
+        advice = (
+            "Maintain a healthy weight, avoid alcohol before bedtime, keep a "
+            "regular sleep schedule, and seek medical advice for proper evaluation."
+        )
+
+    elif result == "Insomnia":
+        heading = "You are likely to experience INSOMNIA."
+        explanation = (
+            "Insomnia is a sleep disorder that makes it difficult to fall asleep, "
+            "stay asleep, or get restful sleep. It can affect mood, concentration, "
+            "and daily functioning."
+        )
+        advice = (
+            "Keep a consistent bedtime, reduce caffeine intake later in the day, "
+            "manage stress, avoid screens before sleep, and speak to a healthcare "
+            "professional if symptoms persist."
+        )
+
+    else:
+        heading = "You are not likely to experience any sleep disorder."
+        explanation = (
+            "This suggests that your current sleep and lifestyle pattern does not "
+            "strongly indicate a sleep disorder at this time."
+        )
+        advice = (
+            "Maintain healthy sleep habits, stay physically active, manage stress, "
+            "and continue monitoring your sleep routine to help prevent future sleep problems."
+        )
+
+    return heading, explanation, advice

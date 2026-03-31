@@ -4,27 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sleep Health Prediction</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background: #f4f6f9;
             margin: 0;
             padding: 0;
+            color: #1f2937;
         }
 
         .container {
-            width: 50%;
+            width: 60%;
             margin: 40px auto;
             background: #fff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
         }
 
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 25px;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            margin-top: 28px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1d4ed8;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 6px;
         }
 
         label {
@@ -32,111 +55,170 @@
             display: block;
             margin-top: 15px;
             margin-bottom: 6px;
-            color: #444;
+            color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
             font-size: 15px;
             box-sizing: border-box;
         }
 
-        button {
-            width: 100%;
-            margin-top: 25px;
-            padding: 12px;
-            background: #007bff;
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .helper-text {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        button, .back-link {
+            flex: 1;
+            padding: 13px;
             border: none;
-            color: white;
-            font-size: 16px;
             border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
         }
 
         button:hover {
-            background: #0056b3;
+            background: #1d4ed8;
         }
 
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background: #eaf4ea;
-            border-left: 5px solid #28a745;
-            border-radius: 8px;
-            color: #155724;
-            font-weight: bold;
-            text-align: center;
+        .reset-btn {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .reset-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .back-link {
+            background: #f8fafc;
+            color: #2563eb;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            background: #eff6ff;
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                width: 85%;
+            }
         }
 
         @media (max-width: 768px) {
             .container {
-                width: 90%;
+                width: 92%;
+                padding: 22px;
+            }
+
+            .button-group {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Sleep Health Disorder Prediction</h1>
+        <h1>Sleep Disorder Prediction</h1>
+        <p class="intro">
+            Fill in your average daily and health information as accurately as possible.
+            This will help the model make a better prediction.
+        </p>
 
         <form action="{{ url_for('predict_datapoint') }}" method="post">
 
-        <label>Age</label>
-        <input type="number" name="age" required>
+            <div class="section-title">Personal Information</div>
 
-        <label>Gender</label>
-        <select name="gender" required>
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" min="1" required>
 
-        <label>Occupation</label>
-        <input type="text" name="occupation" required>
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
 
-        <label>Sleep Duration</label>
-        <input type="number" step="0.1" name="sleep_duration" required>
+            <label for="occupation">Occupation</label>
+            <input type="text" id="occupation" name="occupation" placeholder="e.g. Nurse, Engineer, Teacher" required>
 
-        <label>Quality of Sleep</label>
-        <input type="number" step="0.1" name="quality_of_sleep" required>
+            <div class="section-title">Sleep and Lifestyle Information</div>
 
-        <label>Physical Activity Level</label>
-        <input type="number" step="0.1" name="physical_activity_level" required>
+            <label for="sleep_duration">Sleep Duration</label>
+            <input type="number" id="sleep_duration" name="sleep_duration" step="0.1" min="1" max="10" required>
+            <div class="helper-text">Average daily sleep duration (1-10)</div>
 
-        <label>Stress Level</label>
-        <input type="number" step="0.1" name="stress_level" required>
+            <label for="quality_of_sleep">Quality of Sleep</label>
+            <input type="number" id="quality_of_sleep" name="quality_of_sleep" step="0.1" min="1" max="10" required>
+            <div class="helper-text">Average quality of sleep (1-10)</div>
 
-        <label>BMI Category</label>
-        <select name="bmi_category" required>
-            <option value="">Select BMI Category</option>
-            <option value="Normal">Normal</option>
-            <option value="Overweight">Overweight</option>
-            <option value="Obese">Obese</option>
-        </select>
+            <label for="physical_activity_level">Physical Activity Level</label>
+            <input type="number" id="physical_activity_level" name="physical_activity_level" step="0.1" min="1" max="10" required>
+            <div class="helper-text">Average activity level (1-10)</div>
 
-        <label>Systolic BP</label>
-        <input type="number" name="systolic_bp" required>
+            <label for="stress_level">Stress Level</label>
+            <input type="number" id="stress_level" name="stress_level" step="0.1" min="1" max="10" required>
+            <div class="helper-text">Average stress level (1-10)</div>
 
-        <label>Diastolic BP</label>
-        <input type="number" name="diastolic_bp" required>
+            <label for="daily_steps">Daily Steps</label>
+            <input type="number" id="daily_steps" name="daily_steps" min="0" required>
+            <div class="helper-text">Average daily steps</div>
 
-        <label>Heart Rate</label>
-        <input type="number" name="heart_rate" required>
+            <div class="section-title">Health Indicators</div>
 
-        <label>Daily Steps</label>
-        <input type="number" name="daily_steps" required>
+            <label for="bmi_category">BMI Category</label>
+            <select id="bmi_category" name="bmi_category" required>
+                <option value="">Select BMI Category</option>
+                <option value="Normal">Normal</option>
+                <option value="Overweight">Overweight</option>
+                <option value="Obese">Obese</option>
+            </select>
 
-        <button type="submit">Predict</button>
-    </form>
-        
-        {% if results %}
-        <div class="result">
-            Your Sleep Health Prediction: {{ results }}
-        </div>
-        {% endif %}
+            <label for="systolic_bp">Systolic BP</label>
+            <input type="number" id="systolic_bp" name="systolic_bp" required>
+            <div class="helper-text">Example: 120 mmHg</div>
+
+            <label for="diastolic_bp">Diastolic BP</label>
+            <input type="number" id="diastolic_bp" name="diastolic_bp" required>
+            <div class="helper-text">Example: 80 mmHg</div>
+
+            <label for="heart_rate">Heart Rate</label>
+            <input type="number" id="heart_rate" name="heart_rate" required>
+            <div class="helper-text">Example: 72 b/m</div>
+
+            <div class="button-group">
+                <button type="submit">Predict Sleep Disorder</button>
+                <button type="reset" class="reset-btn">Reset Form</button>
+                <a href="{{ url_for('index') }}" class="back-link">Back to Home</a>
+            </div>
+        </form>
     </div>
 </body>
 </html>

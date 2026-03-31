@@ -5,6 +5,7 @@ from flask import Flask, request, render_template
 # from sklearn.preprocessing import StandardScaler
 
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+from src.utils import generate_prediction_text
 
 application = Flask(__name__)
 
@@ -36,11 +37,19 @@ def predict_datapoint():
             Daily_Steps=int(request.form.get('daily_steps'))
         )
         pred_df = data.get_data_as_dataframe()
-        print(pred_df)
+        # print(pred_df)
         
         pred_pipeline = PredictPipeline()
         results = pred_pipeline.predict(pred_df)
-        return render_template('home.html', results=results[0])
+        
+        result = results[0]
+        heading, explanation, advice = generate_prediction_text(result)
+        
+        return render_template(
+            'result.html', 
+            heading=heading, 
+            explanation=explanation, 
+            advice=advice)
         
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
